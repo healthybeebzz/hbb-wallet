@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "name": "hbb-wallet",
+  "description": "- get balance - credit balance - debit balance",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/healthybeebzz/hbb-wallet.git"
+  },
+  "author": "maria",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/healthybeebzz/hbb-wallet/issues"
+  },
+  "homepage": "https://github.com/healthybeebzz/hbb-wallet#readme"
+}
