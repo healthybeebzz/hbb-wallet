@@ -20,7 +20,7 @@ app.get('/balance/:personId', (req, res) => {
 app.post('/balance/:personId/credit', (req, res) => {
     const personId = req.body.personId;
     const credit = req.body.credit;
-    const balance = req.body.balance;
+    const balance = 10;
 
     const response = {
         personId,
@@ -33,7 +33,7 @@ app.post('/balance/:personId/credit', (req, res) => {
 app.post('/balance/:personId/debit', (req, res) => {
     const personId = req.body.personId;
     const debit = req.body.debit;
-    const balance = req.body.balance;
+    const balance = 10;
 
     const response = {
         personId,
