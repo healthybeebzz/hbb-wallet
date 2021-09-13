@@ -60,28 +60,34 @@ export const createWebServer = () => {
     })
 
 
-    app.post('/balance/debit', (req, res) => {
+    app.post('/balance/debit', async (req, res) => {
         if (!req.body.amount) throw new Error('The `amount` field is not present in the payload.');
         if (!req.body.userId) throw new Error('The `userId` field  is not present in the payload.');
         if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
 
-        // TODO: Fetch all the transactions for the current userId from the database.
-        pool.query(`SELECT * FROM hbb_wallet.transactions WHERE user_id=${req.body.userId}`, (err, res) => {
+        // Fetch all the transactions for the current userId from the database.
+        const queryResult = await pool.query(`SELECT * FROM hbb_wallet.transactions WHERE user_id=${req.body.userId}`);
+        const transactions = queryResult.rows;
+
+        // Compute based on the list of debit and credit transactions what is the available balance.
+        const balance = computeBalance(transactions);
+
+        // Validate that the user has sufficient balance to process a debit. (if debit amount > available balance, throw an error).
+        if (req.body.amount > balance) {
+            throw new Error('Insufficient funds for transaction.')
+        }
+
+        // Insert the transaction in the database.
+        pool.query(`INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id)
+                VALUES (${req.body.userId}, 'debit', ${req.body.amount}, ${req.body.referenceId})`, (err, res) => {
 
             if (err) console.log('err', err);
         })
-        // TODO: Compute based on the list of debit and credit transactions what is the available balance.
 
-        // TODO: Validate that the user has sufficient balance to process a debit. (if debit amount > available balance, throw an error).
-
-        // TODO: Insert the transaction in the database.
-        // TODO: Fetch all the transactions for the current userId from the database.
-        // TODO: Compute based on the list of debit and credit transactions what is the available balance.
-        // TODO: Build the response object.
-
+        // Build the response object.
         const response = {
             userId: req.body.userId,
-            balance: 100
+            balance: balance
         }
 
         res.send(response);
