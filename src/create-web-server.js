@@ -13,19 +13,20 @@ export const createWebServer = () => {
 
     app.use(bodyParser.json());
 
-    app.get('/balance/:userId', (req, res) => {
+    app.get('/balance/:userId', async (req, res) => {
         if (!req.params.userId) throw new Error('The `userId` parameter is not present.');
 
-        const userId = req.params.userId;
+        // Fetch all the transactions for the current userId from the database.
+        const queryResult = await pool.query(`SELECT * FROM hbb_wallet.transactions WHERE user_id=${req.params.userId}`);
+        const transactions = queryResult.rows;
 
-        pool.query("SELECT * FROM hbb_wallet.transactions WHERE user_id=" + userId, (err, res) => {
+        // Compute based on the list of debit and credit transactions what is the available balance.
+        const balance = computeBalance(transactions);
 
-            if (err) console.log('err', err);
-        })
-
-            const response = {
-            userId,
-            balance: 100
+        // Build the response object.
+        const response = {
+            userId: req.params.userId,
+            balance: balance
         }
 
         res.send(response);
@@ -37,11 +38,8 @@ export const createWebServer = () => {
         if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
 
         // Insert the transaction in the database.
-        pool.query(`INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id)
-                VALUES (${req.body.userId}, 'credit', ${req.body.amount}, ${req.body.referenceId})`, (err, res) => {
-
-            if (err) console.log('err', err);
-        })
+        await pool.query(`INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id)
+                VALUES (${req.body.userId}, 'credit', ${req.body.amount}, ${req.body.referenceId})`);
 
         // Fetch all the transactions for the current userId from the database.
         const queryResult = await pool.query(`SELECT * FROM hbb_wallet.transactions WHERE user_id=${req.body.userId}`);
