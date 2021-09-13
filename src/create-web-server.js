@@ -4,6 +4,7 @@ import bodyParser from 'express';
 import {connectToDb} from './db-connection.js'
 
 export const createWebServer = () => {
+    const pool = connectToDb();
     const app = express();
 
     const port = 3000;
@@ -28,7 +29,13 @@ export const createWebServer = () => {
         if (!req.body.userId) throw new Error('The `userId` field  is not present in the payload.');
         if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
 
-        connectToDb();
+        pool.query("INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id) VALUES (2, 'credit', 20, 'test123')", (err, res) => {
+
+            if (res) console.log('res.rows', res.rows);
+            if (err) console.log('err', err);
+
+            pool.end()
+        })
         // TODO: Insert the transaction in the database.
         // TODO: Fetch all the transactions for the current userId from the database.
         // TODO: Compute based on the list of debit and credit transactions what is the available balance.
@@ -48,7 +55,6 @@ export const createWebServer = () => {
         if (!req.body.userId) throw new Error('The `userId` field  is not present in the payload.');
         if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
 
-        connectToDb();
         // TODO: Fetch all the transactions for the current userId from the database.
         // TODO: Compute based on the list of debit and credit transactions what is the available balance.
         // TODO: Validate that the user has sufficient balance to process a debit. (if debit amount > available balance, throw an error).
