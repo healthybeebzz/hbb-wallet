@@ -20,9 +20,6 @@ describe('/balance/:personId', () => {
 
     it('given existing balance > when calling get /balance/:personId > should return valid response', async () => {
         const payload = {
-            requestId: 1,
-            username: 'person123',
-            externalToken: 1
         };
 
         const response = await request(`http://localhost:${port}`).get('/balance/1').send(payload);
