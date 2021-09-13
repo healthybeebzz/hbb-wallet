@@ -1,4 +1,4 @@
-import {createWebServer} from "./create-web-server";
+import {createWebServer} from "./create-web-server.js";
 
 const server = createWebServer();
 
