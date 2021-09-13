@@ -1,5 +1,7 @@
 // Establish connection to db
 import pg from "pg";
+
+
 export const connectToDb = () =>  {
     const pool = new pg.Pool({
         user: 'postgres',
@@ -8,8 +10,5 @@ export const connectToDb = () =>  {
         password: 'postgres',
         port: 5432
     })
-    pool.query('SELECT NOW()', (err, res) => {
-        console.log(err, res)
-        pool.end()
-    })
+    return pool;
 }
