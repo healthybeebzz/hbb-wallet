@@ -46,8 +46,16 @@ export const createWebServer = () => {
         const transactions = queryResult.rows;
 
         // TODO: Compute based on the list of debit and credit transactions what is the available balance.
-        console.log('transactions after', transactions);
-
+        let balance = 0;
+        for (let i = 0; i < transactions.length; i++) {
+            if (transactions[i].type === 'credit'){
+                balance += transactions[i].amount;
+                console.log("balance in for ", balance);
+            } else if (transactions[i].type === 'debit'){
+                balance -= transactions[i].amount;
+            }
+        }
+        console.log("balance ", balance);
 
         // TODO: Build the response object.
 
