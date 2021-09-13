@@ -17,10 +17,8 @@ export const createWebServer = () => {
         const userId = req.params.userId;
 
         pool.query("SELECT * FROM hbb_wallet.transactions WHERE user_id=" + userId, (err, res) => {
-            if (res) console.log('res.rows', res.rows);
-            if (err) console.log('err', err);
 
-            pool.end()
+            if (err) console.log('err', err);
         })
 
             const response = {
@@ -31,22 +29,26 @@ export const createWebServer = () => {
         res.send(response);
     });
 
-    app.post('/balance/credit', (req, res) => {
+    app.post('/balance/credit', async (req, res) => {
         if (!req.body.amount) throw new Error('The `amount` field is not present in the payload.');
         if (!req.body.userId) throw new Error('The `userId` field  is not present in the payload.');
         if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
 
+        // TODO: Insert the transaction in the database.
         pool.query(`INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id)
                 VALUES (${req.body.userId}, 'credit', ${req.body.amount}, ${req.body.referenceId})`, (err, res) => {
 
-            if (res) console.log('res.rows', res.rows);
             if (err) console.log('err', err);
-
-            pool.end()
         })
-        // TODO: Insert the transaction in the database.
+
         // TODO: Fetch all the transactions for the current userId from the database.
+        const queryResult = await pool.query(`SELECT * FROM hbb_wallet.transactions WHERE user_id=${req.body.userId}`);
+        const transactions = queryResult.rows;
+
         // TODO: Compute based on the list of debit and credit transactions what is the available balance.
+        console.log('transactions after', transactions);
+
+
         // TODO: Build the response object.
 
         const response = {
@@ -99,6 +101,7 @@ export const createWebServer = () => {
                 console.log(`App closed from http://localhost:${port}`);
                 resolve();
             })
+            pool.end();
         });
     }
 
