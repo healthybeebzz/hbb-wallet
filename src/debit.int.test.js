@@ -3,7 +3,7 @@ import request from 'supertest';
 import {createWebServer} from "./create-web-server.js";
 
 
-describe('/balance/:personId/:debit', () => {
+describe('/balance/debit', () => {
     let port;
     let server;
 
@@ -18,19 +18,19 @@ describe('/balance/:personId/:debit', () => {
         await server.stop();
     });
 
-    it('given existing balance > when calling post /balance/:personId/:debit > should return valid response', async () => {
+    it('given existing balance > when calling post /balance/debit > should return valid response', async () => {
         const payload = {
             amount: 12,
             userId: 5,
             referenceId: 2323
         };
 
-        const response = await request(`http://localhost:${port}`).post('/balance/1/10').send(payload);
+        const response = await request(`http://localhost:${port}`).post('/balance/debit').send(payload);
 
         expect(response.status).to.be.equal(200);
         expect(response.body).to.be.deep.equal({
-            personId: "1",
-            balance: "1010"
+            userId: 5,
+            balance: 100
         });
     });
 });

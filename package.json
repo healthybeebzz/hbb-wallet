@@ -12,7 +12,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node .",
-    "test": "test"
+    "test": "nyc mocha \"src/**/*.test.js\""
   },
   "repository": {
     "type": "git",
