@@ -58,10 +58,9 @@ export const createWebServer = () => {
         console.log("balance ", balance);
 
         // TODO: Build the response object.
-
         const response = {
             userId: req.body.userId,
-            balance: 100
+            balance: balance
         }
 
         res.send(response);
