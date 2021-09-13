@@ -16,7 +16,14 @@ export const createWebServer = () => {
 
         const userId = req.params.userId;
 
-        const response = {
+        pool.query("SELECT * FROM hbb_wallet.transactions WHERE user_id=" + userId, (err, res) => {
+            if (res) console.log('res.rows', res.rows);
+            if (err) console.log('err', err);
+
+            pool.end()
+        })
+
+            const response = {
             userId,
             balance: 100
         }
