@@ -36,7 +36,8 @@ export const createWebServer = () => {
         if (!req.body.userId) throw new Error('The `userId` field  is not present in the payload.');
         if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
 
-        pool.query("INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id) VALUES (2, 'credit', 20, 'test123')", (err, res) => {
+        pool.query(`INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id)
+                VALUES (${req.body.userId}, 'credit', ${req.body.amount}, ${req.body.referenceId})`, (err, res) => {
 
             if (res) console.log('res.rows', res.rows);
             if (err) console.log('err', err);
