@@ -2,10 +2,12 @@ import http from 'http';
 import express from 'express';
 import bodyParser from 'express';
 import {connectToDb} from './db-connection.js'
+import {computeBalance} from "./compute-balance.js";
 
 export const createWebServer = () => {
     const pool = connectToDb();
     const app = express();
+
 
     const port = 3000;
 
@@ -34,30 +36,21 @@ export const createWebServer = () => {
         if (!req.body.userId) throw new Error('The `userId` field  is not present in the payload.');
         if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
 
-        // TODO: Insert the transaction in the database.
+        // Insert the transaction in the database.
         pool.query(`INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id)
                 VALUES (${req.body.userId}, 'credit', ${req.body.amount}, ${req.body.referenceId})`, (err, res) => {
 
             if (err) console.log('err', err);
         })
 
-        // TODO: Fetch all the transactions for the current userId from the database.
+        // Fetch all the transactions for the current userId from the database.
         const queryResult = await pool.query(`SELECT * FROM hbb_wallet.transactions WHERE user_id=${req.body.userId}`);
         const transactions = queryResult.rows;
 
-        // TODO: Compute based on the list of debit and credit transactions what is the available balance.
-        let balance = 0;
-        for (let i = 0; i < transactions.length; i++) {
-            if (transactions[i].type === 'credit'){
-                balance += transactions[i].amount;
-                console.log("balance in for ", balance);
-            } else if (transactions[i].type === 'debit'){
-                balance -= transactions[i].amount;
-            }
-        }
-        console.log("balance ", balance);
+        // Compute based on the list of debit and credit transactions what is the available balance.
+        const balance = computeBalance(transactions);
 
-        // TODO: Build the response object.
+        // Build the response object.
         const response = {
             userId: req.body.userId,
             balance: balance
@@ -73,7 +66,12 @@ export const createWebServer = () => {
         if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
 
         // TODO: Fetch all the transactions for the current userId from the database.
+        pool.query(`SELECT * FROM hbb_wallet.transactions WHERE user_id=${req.body.userId}`, (err, res) => {
+
+            if (err) console.log('err', err);
+        })
         // TODO: Compute based on the list of debit and credit transactions what is the available balance.
+
         // TODO: Validate that the user has sufficient balance to process a debit. (if debit amount > available balance, throw an error).
 
         // TODO: Insert the transaction in the database.
