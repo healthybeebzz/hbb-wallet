@@ -1,4 +1,4 @@
-// establish connection to db
+// Establish connection to db
 import pg from "pg";
 export const connectToDb = () =>  {
     const pool = new pg.Pool({
