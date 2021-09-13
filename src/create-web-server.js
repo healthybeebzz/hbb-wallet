@@ -76,16 +76,20 @@ export const createWebServer = () => {
         }
 
         // Insert the transaction in the database.
-        pool.query(`INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id)
-                VALUES (${req.body.userId}, 'debit', ${req.body.amount}, ${req.body.referenceId})`, (err, res) => {
+        await pool.query(`INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id)
+                VALUES (${req.body.userId}, 'debit', ${req.body.amount}, ${req.body.referenceId})`);
 
-            if (err) console.log('err', err);
-        })
+        // Fetch all the transactions for the current userId from the database.
+        const queryResult2 = await pool.query(`SELECT * FROM hbb_wallet.transactions WHERE user_id=${req.body.userId}`);
+        const transactions2 = queryResult2.rows;
+
+        // Compute based on the list of debit and credit transactions what is the available balance.
+        const balance2 = computeBalance(transactions2);
 
         // Build the response object.
         const response = {
             userId: req.body.userId,
-            balance: balance
+            balance: balance2
         }
 
         res.send(response);
