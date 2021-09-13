@@ -18,7 +18,7 @@ describe('/balance/:personId', () => {
         await server.stop();
     });
 
-    it('given existing balance > when calling get /balance/:userId > should return valid response', async () => {
+    it('given existing balance > when calling GET /balance/:userId > should return valid response', async () => {
         const response = await request(`http://localhost:${port}`).get('/balance/1').send();
 
         expect(response.status).to.be.equal(200);

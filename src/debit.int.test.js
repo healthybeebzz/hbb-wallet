@@ -18,7 +18,7 @@ describe('/balance/debit', () => {
         await server.stop();
     });
 
-    it('given existing balance > when calling post /balance/debit > should return valid response', async () => {
+    it('given existing balance > when calling POST /balance/debit > should return valid response', async () => {
         const payload = {
             amount: 12,
             userId: 5,
