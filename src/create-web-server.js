@@ -9,47 +9,57 @@ export const createWebServer = () => {
 
     app.use(bodyParser.json());
 
-    app.get('/balance/:personId', (req, res) => {
-        const personId = req.params.personId;
+    app.get('/balance/:userId', (req, res) => {
+        if (!req.params.userId) throw new Error('The `userId` parameter is not present.');
+
+        const userId = req.params.userId;
 
         const response = {
-            personId,
-            balance: "2000"
+            userId,
+            balance: 2000
         }
+
         res.send(response);
     });
 
-    app.post('/balance/:personId/:credit', (req, res) => {
+    app.post('/balance/credit', (req, res) => {
         if (!req.body.amount) throw new Error('The `amount` field is not present in the payload.');
         if (!req.body.userId) throw new Error('The `userId` field  is not present in the payload.');
         if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
 
-        const personId = req.params.personId;
-        const credit = req.params.credit;
-        const balance = 10;
-
+        // TODO: Insert the transaction in the database.
+        // TODO: Fetch all the transactions for the current userId from the database.
+        // TODO: Compute based on the list of debit and credit transactions what is the available balance.
+        // TODO: Build the response object.
 
         const response = {
-            personId,
-            balance: balance + credit
+            userId: req.body.userId,
+            balance: 100
         }
+
         res.send(response);
     })
 
 
-    app.post('/balance/:personId/:debit', (req, res) => {
+    app.post('/balance/debit', (req, res) => {
         if (!req.body.amount) throw new Error('The `amount` field is not present in the payload.');
         if (!req.body.userId) throw new Error('The `userId` field  is not present in the payload.');
         if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
 
-        const personId = req.body.personId;
-        const debit = req.body.debit;
-        const balance = 10;
+        // TODO: Fetch all the transactions for the current userId from the database.
+        // TODO: Compute based on the list of debit and credit transactions what is the available balance.
+        // TODO: Validate that the user has sufficient balance to process a debit. (if debit amount > available balance, throw an error).
+
+        // TODO: Insert the transaction in the database.
+        // TODO: Fetch all the transactions for the current userId from the database.
+        // TODO: Compute based on the list of debit and credit transactions what is the available balance.
+        // TODO: Build the response object.
 
         const response = {
-            personId,
-            balance: balance - debit
+            userId: req.body.userId,
+            balance: 100
         }
+
         res.send(response);
     })
 
