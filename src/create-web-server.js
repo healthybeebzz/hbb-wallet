@@ -16,7 +16,7 @@ export const createWebServer = () => {
 
         const response = {
             userId,
-            balance: 2000
+            balance: 100
         }
 
         res.send(response);

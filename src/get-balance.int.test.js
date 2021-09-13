@@ -18,16 +18,13 @@ describe('/balance/:personId', () => {
         await server.stop();
     });
 
-    it('given existing balance > when calling get /balance/:personId > should return valid response', async () => {
-        const payload = {
-        };
-
-        const response = await request(`http://localhost:${port}`).get('/balance/1').send(payload);
+    it('given existing balance > when calling get /balance/:userId > should return valid response', async () => {
+        const response = await request(`http://localhost:${port}`).get('/balance/1').send();
 
         expect(response.status).to.be.equal(200);
         expect(response.body).to.be.deep.equal({
-            personId: "1",
-            balance: "2000"
+            userId: '1',
+            balance: 100
         });
     });
 });
