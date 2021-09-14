@@ -1,13 +1,12 @@
 import http from 'http';
 import express from 'express';
 import bodyParser from 'express';
-import req from 'express';
 import {connectToDb} from './db-connection.js'
 import {computeBalance} from "./compute-balance.js";
 import {insertTransaction} from "./transactions.js";
 import {fetchTransactions} from "./transactions.js";
-import {payloadValidationMiddleware} from "./payloadValidationMiddleware.js";
-import {errorHandler} from "./errorHandler.js";
+import {payloadValidationMiddleware} from "./payload-validation-middleware.js";
+import {errorHandler} from "./error-handler.js";
 
 export const createWebServer = () => {
     const pool = connectToDb();
