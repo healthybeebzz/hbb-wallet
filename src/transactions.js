@@ -8,7 +8,7 @@ export const insertTransactionDebit = async (pool, userId, amount, referenceId) 
                 VALUES (${userId}, 'debit', ${amount}, ${referenceId})`);
 }
 
-export const fetchTransaction = async (pool, userId) => {
+export const fetchTransactions = async (pool, userId) => {
     const queryResult = await pool.query(`SELECT * FROM hbb_wallet.transactions WHERE user_id=${userId}`);
     console.log("queryResult ", queryResult);
     console.log("queryResult.rows", queryResult.rows);
