@@ -5,6 +5,7 @@ import {connectToDb} from './db-connection.js'
 import {computeBalance} from "./compute-balance.js";
 import {insertTransaction} from "./transactions.js";
 import {fetchTransactions} from "./transactions.js";
+import {payloadValidationMiddleware} from "./payloadValidationMiddleware.js";
 
 export const createWebServer = () => {
     const pool = connectToDb();
@@ -32,10 +33,7 @@ export const createWebServer = () => {
         res.send(response);
     });
 
-    app.post('/balance/credit', async (req, res) => {
-        if (!req.body.amount) throw new Error('The `amount` field is not present in the payload.');
-        if (!req.body.userId) throw new Error('The `userId` field  is not present in the payload.');
-        if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
+    app.post('/balance/credit', payloadValidationMiddleware, async (req, res) => {
 
         // Insert the transaction in the database.
         let credit = 'credit';
@@ -57,10 +55,7 @@ export const createWebServer = () => {
     })
 
 
-    app.post('/balance/debit', async (req, res) => {
-        if (!req.body.amount) throw new Error('The `amount` field is not present in the payload.');
-        if (!req.body.userId) throw new Error('The `userId` field  is not present in the payload.');
-        if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
+    app.post('/balance/debit', payloadValidationMiddleware, async (req, res) => {
 
         // Fetch all the transactions for the current userId from the database.
         const transactions = await fetchTransactions(pool, req.body.userId);
