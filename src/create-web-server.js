@@ -3,14 +3,12 @@ import express from 'express';
 import bodyParser from 'express';
 import {connectToDb} from './db-connection.js'
 import {computeBalance} from "./compute-balance.js";
-import {insertTransactionCredit} from "./transactions.js";
-import {insertTransactionDebit} from "./transactions.js";
+import {insertTransaction} from "./transactions.js";
 import {fetchTransactions} from "./transactions.js";
 
 export const createWebServer = () => {
     const pool = connectToDb();
     const app = express();
-
 
     const port = 3000;
 
@@ -40,7 +38,8 @@ export const createWebServer = () => {
         if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
 
         // Insert the transaction in the database.
-        await insertTransactionCredit(pool, req.body.userId, req.body.amount, req.body.referenceId);
+        let credit = 'credit';
+        await insertTransaction(pool, req.body.userId, req.body.amount, req.body.referenceId, credit);
 
         // Fetch all the transactions for the current userId from the database.
         const transactions = await fetchTransactions(pool, req.body.userId);
@@ -75,7 +74,8 @@ export const createWebServer = () => {
         }
 
         // Insert the transaction in the database.
-        await insertTransactionDebit(pool, req.body.userId, req.body.amount, req.body.referenceId);
+        let debit = 'debit';
+        await insertTransaction(pool, req.body.userId, req.body.amount, req.body.referenceId, debit);
 
         // Fetch all the transactions for the current userId from the database.
         const transactions2 = await fetchTransactions(pool, req.body.userId);
