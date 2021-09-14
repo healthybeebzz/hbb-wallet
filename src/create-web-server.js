@@ -5,7 +5,7 @@ import {connectToDb} from './db-connection.js'
 import {computeBalance} from "./compute-balance.js";
 import {insertTransactionCredit} from "./transactions.js";
 import {insertTransactionDebit} from "./transactions.js";
-import {fetchTransaction} from "./transactions.js";
+import {fetchTransactions} from "./transactions.js";
 
 export const createWebServer = () => {
     const pool = connectToDb();
@@ -20,7 +20,7 @@ export const createWebServer = () => {
         if (!req.params.userId) throw new Error('The `userId` parameter is not present.');
 
         // Fetch all the transactions for the current userId from the database.
-        const transactions = await fetchTransaction(pool, req.params.userId);
+        const transactions = await fetchTransactions(pool, req.params.userId);
 
         // Compute based on the list of debit and credit transactions what is the available balance.
         const balance = computeBalance(transactions);
@@ -43,7 +43,7 @@ export const createWebServer = () => {
         await insertTransactionCredit(pool, req.body.userId, req.body.amount, req.body.referenceId);
 
         // Fetch all the transactions for the current userId from the database.
-        const transactions = await fetchTransaction(pool, req.body.userId);
+        const transactions = await fetchTransactions(pool, req.body.userId);
 
         // Compute based on the list of debit and credit transactions what is the available balance.
         const balance = computeBalance(transactions);
@@ -64,8 +64,7 @@ export const createWebServer = () => {
         if (!req.body.referenceId) throw new Error('The `referenceId` field  is not present in the payload.');
 
         // Fetch all the transactions for the current userId from the database.
-        const queryResult = await pool.query(`SELECT * FROM hbb_wallet.transactions WHERE user_id=${req.body.userId}`);
-        const transactions = queryResult.rows;
+        const transactions = await fetchTransactions(pool, req.body.userId);
 
         // Compute based on the list of debit and credit transactions what is the available balance.
         const balance = computeBalance(transactions);
@@ -76,12 +75,10 @@ export const createWebServer = () => {
         }
 
         // Insert the transaction in the database.
-        await pool.query(`INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id)
-                VALUES (${req.body.userId}, 'debit', ${req.body.amount}, ${req.body.referenceId})`);
+        await insertTransactionDebit(pool, req.body.userId, req.body.amount, req.body.referenceId);
 
         // Fetch all the transactions for the current userId from the database.
-        const queryResult2 = await pool.query(`SELECT * FROM hbb_wallet.transactions WHERE user_id=${req.body.userId}`);
-        const transactions2 = queryResult2.rows;
+        const transactions2 = await fetchTransactions(pool, req.body.userId);
 
         // Compute based on the list of debit and credit transactions what is the available balance.
         const balance2 = computeBalance(transactions2);
