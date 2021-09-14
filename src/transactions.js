@@ -1,6 +1,11 @@
-export const insertTransaction = async (pool, userId, amount, referenceId) => {
+export const insertTransactionCredit = async (pool, userId, amount, referenceId) => {
     await pool.query(`INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id)
                 VALUES (${userId}, 'credit', ${amount}, ${referenceId})`);
+}
+
+export const insertTransactionDebit = async (pool, userId, amount, referenceId) => {
+    await pool.query(`INSERT INTO hbb_wallet.transactions(user_id, type, amount, refrence_id)
+                VALUES (${userId}, 'debit', ${amount}, ${referenceId})`);
 }
 
 export const fetchTransaction = async (pool, userId) => {
