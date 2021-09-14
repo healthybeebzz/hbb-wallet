@@ -1,11 +1,13 @@
 import http from 'http';
 import express from 'express';
 import bodyParser from 'express';
+import req from 'express';
 import {connectToDb} from './db-connection.js'
 import {computeBalance} from "./compute-balance.js";
 import {insertTransaction} from "./transactions.js";
 import {fetchTransactions} from "./transactions.js";
 import {payloadValidationMiddleware} from "./payloadValidationMiddleware.js";
+import {errorHandler} from "./errorHandler.js";
 
 export const createWebServer = () => {
     const pool = connectToDb();
@@ -15,7 +17,7 @@ export const createWebServer = () => {
 
     app.use(bodyParser.json());
 
-    app.get('/balance/:userId', async (req, res) => {
+    app.get('/balance/:userId', errorHandler, async (req, res) => {
         if (!req.params.userId) throw new Error('The `userId` parameter is not present.');
 
         // Fetch all the transactions for the current userId from the database.
@@ -33,7 +35,7 @@ export const createWebServer = () => {
         res.send(response);
     });
 
-    app.post('/balance/credit', payloadValidationMiddleware, async (req, res) => {
+    app.post('/balance/credit', payloadValidationMiddleware, errorHandler, async (req, res) => {
 
         // Insert the transaction in the database.
         let credit = 'credit';
@@ -55,7 +57,7 @@ export const createWebServer = () => {
     })
 
 
-    app.post('/balance/debit', payloadValidationMiddleware, async (req, res) => {
+    app.post('/balance/debit', payloadValidationMiddleware, errorHandler, async (req, res) => {
 
         // Fetch all the transactions for the current userId from the database.
         const transactions = await fetchTransactions(pool, req.body.userId);
