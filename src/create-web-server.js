@@ -8,6 +8,7 @@ import {fetchTransactions} from "./transactions.js";
 import {payloadValidationMiddleware} from "./payload-validation-middleware.js";
 import {errorHandler} from "./error-handler.js";
 
+
 export const createWebServer = () => {
     const pool = connectToDb();
     const app = express();
