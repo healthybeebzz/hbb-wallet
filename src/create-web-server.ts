@@ -1,12 +1,12 @@
 import http from 'http';
 import express from 'express';
 import bodyParser from 'express';
-import {connectToDb} from './db-connection.ts'
-import {computeBalance} from "./compute-balance.ts";
-import {insertTransaction} from "./transactions.ts";
-import {fetchTransactions} from "./transactions.ts";
-import {payloadValidationMiddleware} from "./payload-validation-middleware.ts";
-import {errorHandler} from "./error-handler.ts";
+import {connectToDb} from './db-connection'
+import {computeBalance} from "./compute-balance";
+import {insertTransaction} from "./transactions";
+import {fetchTransactions} from "./transactions";
+import {payloadValidationMiddleware} from "./payload-validation-middleware";
+import {errorHandler} from "./error-handler";
 
 
 export const createWebServer = () => {
