@@ -1,12 +1,14 @@
 import http from 'http';
-import express from 'express';
+import express, {Request, Response} from 'express';
 import bodyParser from 'express';
+import {NextFunction} from "express";
 import {connectToDb} from './db-connection'
 import {computeBalance} from "./compute-balance";
 import {insertTransaction, OperationType} from "./transactions";
 import {fetchTransactions} from "./transactions";
 import {payloadValidationMiddleware} from "./payload-validation-middleware";
 import {errorHandler} from "./error-handler";
+
 
 
 export const createWebServer = () => {
@@ -47,7 +49,7 @@ export const createWebServer = () => {
         // Compute based on the list of debit and credit transactions what is the available balance.
         const balance = computeBalance(transactions);
 
-        // Build the response obxwject.
+        // Build the response object.
         const response = {
             userId: req.body.userId,
             balance: balance
