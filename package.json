@@ -31,7 +31,11 @@
   },
   "homepage": "https://github.com/healthybeebzz/hbb-wallet#readme",
   "devDependencies": {
+    "@types/chai": "^4.2.21",
+    "@types/jest": "^27.0.1",
     "@types/node": "^16.9.1",
+    "@types/pg": "^8.6.1",
+    "@types/supertest": "^2.0.11",
     "typescript": "^4.4.3"
   }
 }
