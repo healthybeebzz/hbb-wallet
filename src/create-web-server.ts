@@ -23,7 +23,7 @@ export const createWebServer = () => {
         if (!req.params.userId) throw new Error('The `userId` parameter is not present.');
 
         // Fetch all the transactions for the current userId from the database.
-        const transactions = await fetchTransactions(pool, req.params.userId);
+        const transactions = await fetchTransactions(pool, Number(req.params.userId));
 
         // Compute based on the list of debit and credit transactions what is the available balance.
         const balance = computeBalance(transactions);
@@ -94,7 +94,7 @@ export const createWebServer = () => {
     const server = http.createServer(app);
 
     const start = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             server.listen(port, () => {
                 console.log(`App listening at http://localhost:${port}`);
                 resolve();
@@ -103,7 +103,7 @@ export const createWebServer = () => {
     }
 
     const stop = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise<void>((resolve, reject) => {
             server.close(err => {
                 if (err) return reject();
 
