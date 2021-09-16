@@ -19,7 +19,7 @@ export const createWebServer = () => {
 
     app.use(bodyParser.json());
 
-    app.get('/balance/:userId', errorHandler, async (req, res) => {
+    app.get('/balance/:userId', errorHandler, async (req: Request, res: Response) => {
         if (!req.params.userId) throw new Error('The `userId` parameter is not present.');
 
         // Fetch all the transactions for the current userId from the database.
@@ -37,7 +37,7 @@ export const createWebServer = () => {
         res.send(response);
     });
 
-    app.post('/balance/credit', payloadValidationMiddleware, errorHandler, async (req, res) => {
+    app.post('/balance/credit', payloadValidationMiddleware, errorHandler, async (req: Request, res: Response) => {
 
         // Insert the transaction in the database.
         let credit = 'credit';
@@ -59,7 +59,7 @@ export const createWebServer = () => {
     })
 
 
-    app.post('/balance/debit', payloadValidationMiddleware, errorHandler, async (req, res) => {
+    app.post('/balance/debit', payloadValidationMiddleware, errorHandler, async (req: Request, res: Response) => {
 
         // Fetch all the transactions for the current userId from the database.
         const transactions = await fetchTransactions(pool, req.body.userId);

@@ -10,7 +10,37 @@ export const insertTransaction = async (pool: Pool, userId: number, amount: numb
                 VALUES (${userId}, '${operationType}', ${amount}, ${referenceId})`);
 }
 
+export type Transaction = {
+    id: number,
+    userId: number,
+    type: string,
+    amount: number,
+    referenceId: number,
+    createdAt: Date
+}
+
+/**
+ * Fetches transcations from the table and maps them to DTO (data transfer objects).
+ * @param pool
+ * @param userId
+ */
 export const fetchTransactions = async (pool: Pool, userId: number) => {
     const queryResult = await pool.query(`SELECT * FROM hbb_wallet.transactions WHERE user_id=${userId}`);
-    return queryResult.rows;
+    const rows = queryResult.rows;
+
+    const resultsArray: Array<Transaction> = [];
+    for (let i = 0; i < rows.length; i++) {
+        const obj = {
+            id: rows[i].id,
+            userId: rows[i].user_id,
+            type: rows[i].type,
+            amount: rows[i].amount,
+            referenceId: rows[i].reference_id,
+            createdAt: rows[i].created_at
+        }
+
+        resultsArray.push(obj);
+    }
+
+    return resultsArray;
 }

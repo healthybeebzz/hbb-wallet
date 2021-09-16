@@ -1,10 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es2017",                                     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
-    "lib": ["es6"],                                      /* Specify a set of bundled library declaration files that describe the target runtime environment. */
-    "module": "commonjs",                                /* Specify what module code is generated. */
+    "target": "esnext",                                     /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */
+    "lib": ["es2018"],                                      /* Specify a set of bundled library declaration files that describe the target runtime environment. */
+    "module": "esnext",                                /* Specify what module code is generated. */
     "rootDir": "src",                                    /* Specify the root folder within your source files. *//* Allow accessing UMD globals from modules. */
-    "resolveJsonModule": true,                           /* Enable importing .json files */
+    "resolveJsonModule": true,
+    "moduleResolution": "node",/* Enable importing .json files */
     "allowJs": true,                                     /* Allow JavaScript files to be a part of your program. Use the `checkJS` option to get errors from these files. */
     "outDir": "build",                                   /* Specify an output folder for all emitted files. */
     "esModuleInterop": true,                             /* Emit additional JavaScript to ease support for importing CommonJS modules. This enables `allowSyntheticDefaultImports` for type compatibility. */
@@ -13,3 +14,6 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   }
 }
+
+
+

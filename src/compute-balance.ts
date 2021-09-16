@@ -1,4 +1,7 @@
-export const computeBalance = (transactions) => {
+import {Transaction} from "./transactions";
+
+
+export const computeBalance = (transactions: Array<Transaction> = []) => {
     let balance = 0;
     for (let i = 0; i < transactions.length; i++) {
         if (transactions[i].type === 'credit'){
