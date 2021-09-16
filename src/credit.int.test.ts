@@ -1,6 +1,6 @@
 import {expect} from 'chai';
 import request from 'supertest';
-import {createWebServer} from "./create-web-server.js";
+import {createWebServer} from "./create-web-server.ts";
 
 
 describe('/balance/credit', () => {
