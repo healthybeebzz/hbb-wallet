@@ -3,7 +3,7 @@ import express from 'express';
 import bodyParser from 'express';
 import {connectToDb} from './db-connection'
 import {computeBalance} from "./compute-balance";
-import {insertTransaction} from "./transactions";
+import {insertTransaction, OperationType} from "./transactions";
 import {fetchTransactions} from "./transactions";
 import {payloadValidationMiddleware} from "./payload-validation-middleware";
 import {errorHandler} from "./error-handler";
@@ -39,7 +39,7 @@ export const createWebServer = () => {
 
         // Insert the transaction in the database.
         let credit = 'credit';
-        await insertTransaction(pool, req.body.userId, req.body.amount, req.body.referenceId, credit);
+        await insertTransaction(pool, req.body.userId, req.body.amount, req.body.referenceId, OperationType.CREDIT);
 
         // Fetch all the transactions for the current userId from the database.
         const transactions = await fetchTransactions(pool, req.body.userId);
@@ -47,7 +47,7 @@ export const createWebServer = () => {
         // Compute based on the list of debit and credit transactions what is the available balance.
         const balance = computeBalance(transactions);
 
-        // Build the response object.
+        // Build the response obxwject.
         const response = {
             userId: req.body.userId,
             balance: balance
@@ -72,7 +72,7 @@ export const createWebServer = () => {
 
         // Insert the transaction in the database.
         let debit = 'debit';
-        await insertTransaction(pool, req.body.userId, req.body.amount, req.body.referenceId, debit);
+        await insertTransaction(pool, req.body.userId, req.body.amount, req.body.referenceId, OperationType.DEBIT);
 
         // Fetch all the transactions for the current userId from the database.
         const transactions2 = await fetchTransactions(pool, req.body.userId);
