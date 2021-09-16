@@ -1,5 +1,5 @@
 import {expect} from 'chai';
-import request from 'supertest';
+import * as request from 'supertest';
 import {createWebServer} from "./create-web-server";
 
 

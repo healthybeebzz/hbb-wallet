@@ -1,7 +1,6 @@
-import http from 'http';
-import express, {Request, Response} from 'express';
-import bodyParser from 'express';
-import {NextFunction} from "express";
+import * as http from 'http';
+import {Request, Response} from 'express';
+import * as express from "express";
 import {connectToDb} from './db-connection'
 import {computeBalance} from "./compute-balance";
 import {insertTransaction, OperationType} from "./transactions";
@@ -17,7 +16,7 @@ export const createWebServer = () => {
 
     const port = 3000;
 
-    app.use(bodyParser.json());
+    app.use(express.json());
 
     app.get('/balance/:userId', errorHandler, async (req: Request, res: Response) => {
         if (!req.params.userId) throw new Error('The `userId` parameter is not present.');

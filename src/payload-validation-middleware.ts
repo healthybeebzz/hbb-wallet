@@ -2,7 +2,7 @@
  Checks if payload is valid and throws error if it is not.
  */
 import {NextFunction} from "express";
-import express, {Request, Response} from 'express';
+import {Request, Response} from 'express';
 
 export const payloadValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
