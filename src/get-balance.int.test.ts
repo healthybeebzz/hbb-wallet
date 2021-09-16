@@ -4,8 +4,8 @@ import {createWebServer} from "./create-web-server";
 
 
 describe('/balance/:personId', () => {
-    let port;
-    let server;
+    let port: number;
+    let server: { stop: () => Promise<unknown>, port: number, start: () => Promise<unknown> };;
 
     before(async () => {
         server = createWebServer();
