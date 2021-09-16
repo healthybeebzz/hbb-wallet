@@ -12,7 +12,7 @@
   "description": "- get balance - credit balance - debit balance",
   "version": "1.0.0",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "build/index.js",
   "scripts": {
     "start": "node .",
     "test": "nyc mocha \"src/**/*.test.js\"",
