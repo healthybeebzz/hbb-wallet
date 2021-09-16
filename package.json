@@ -29,5 +29,8 @@
   "bugs": {
     "url": "https://github.com/healthybeebzz/hbb-wallet/issues"
   },
-  "homepage": "https://github.com/healthybeebzz/hbb-wallet#readme"
+  "homepage": "https://github.com/healthybeebzz/hbb-wallet#readme",
+  "devDependencies": {
+    "@types/node": "^16.9.1"
+  }
 }
