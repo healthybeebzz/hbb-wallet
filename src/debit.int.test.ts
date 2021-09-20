@@ -1,11 +1,11 @@
 import {expect} from 'chai';
-import * as request from 'supertest';
+import {default as axios} from 'axios';
 import {createWebServer} from "./create-web-server";
 
 
 describe('/balance/debit', () => {
     let port: number;
-    let server: { stop: () => Promise<unknown>, port: number, start: () => Promise<unknown> };;
+    let server: { stop: () => Promise<unknown>, port: number, start: () => Promise<unknown> };
 
     before(async () => {
         server = createWebServer();
@@ -25,10 +25,10 @@ describe('/balance/debit', () => {
             referenceId: 2323
         };
 
-        const response = await request(`http://localhost:${port}`).post('/balance/debit').send(payload);
+        const response = await axios.post(`http://localhost:${port}/balance/debit`, payload);
 
         expect(response.status).to.be.equal(200);
-        expect(response.body).to.be.deep.equal({
+        expect(response.data).to.be.deep.equal({
             userId: 5,
             balance: 100
         });
