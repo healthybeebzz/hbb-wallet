@@ -8,6 +8,7 @@ import {fetchTransactions} from "./transactions";
 import {payloadValidationMiddleware} from "./payload-validation-middleware";
 import {errorHandler} from "./error-handler";
 import {asyncHandler} from "./async-handler";
+import {config} from "./config";
 
 
 export const createWebServer = () => {
@@ -103,6 +104,7 @@ export const createWebServer = () => {
         return new Promise<void>((resolve, reject) => {
             server.listen(port, () => {
                 console.log(`App listening at http://localhost:${port}`);
+                console.log('Config:', config);
                 resolve();
             });
         });
