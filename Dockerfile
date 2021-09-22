@@ -1,14 +1,14 @@
-FROM node:14
-WORKDIR /hbb-wallet/src/index.ts
+FROM node:12.18.1
 
-COPY package*.json ./
+ENV NODE_ENV=production
 
-RUN npm install
+WORKDIR /app
 
-# Bundle app source
+COPY ["package.json", "package-lock.json*", "./"]
+
+RUN npm install --production
+RUN npm build
+
 COPY . .
 
-EXPOSE 3000
-
-CMD [ "node", " ." ]
-
+CMD [ "node", "." ]
