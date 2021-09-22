@@ -1,5 +1,5 @@
 import * as http from 'http';
-import {Request, Response} from 'express';
+import {NextFunction, Request, Response} from 'express';
 import * as express from "express";
 import {connectToDb} from './db-connection'
 import {computeBalance} from "./compute-balance";
@@ -17,6 +17,12 @@ export const createWebServer = () => {
     const port = 3000;
 
     app.use(express.json());
+
+    // Logs the request payload and request params if applicable
+    app.use((req: Request, res: Response, next: NextFunction) => {
+        console.log("Request payload: ", req.body);
+        if (req.params) console.log("Request params: ", req.params);
+    });
 
     app.get('/balance/:userId', asyncHandler(async (req: Request, res: Response) => {
         if (!req.params.userId) throw new Error('The `userId` parameter is not present.');
