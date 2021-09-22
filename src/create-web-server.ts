@@ -22,6 +22,7 @@ export const createWebServer = () => {
     app.use((req: Request, res: Response, next: NextFunction) => {
         console.log("Request payload: ", req.body);
         if (req.params) console.log("Request params: ", req.params);
+        next();
     });
 
     app.get('/balance/:userId', asyncHandler(async (req: Request, res: Response) => {
