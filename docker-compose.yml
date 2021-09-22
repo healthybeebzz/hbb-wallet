@@ -1,0 +1,32 @@
+version: '3.3'
+services:
+  hbb-wallet-db:
+    container_name: hbb-wallet-db
+    build:
+      context: ./db
+    ports:
+      - "5432:5432"
+    networks:
+      - lndnet
+
+  hbb-wallet:
+    container_name: hbb-wallet
+    build:
+      context: ./
+    environment:
+        - DB_HOST=hbb-wallet-db
+        - DB_USER=postgres
+        - DB_PASS=postgres
+        - DB_DATABASE=postgres
+        - DB_PORT=5432
+
+    ports:
+      - "3000:3000"
+    networks:
+      - lndnet
+    depends_on:
+      - "hbb-wallet-db"
+
+networks:
+  lndnet:
+    driver: bridge
