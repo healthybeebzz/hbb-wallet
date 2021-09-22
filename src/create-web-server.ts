@@ -7,7 +7,7 @@ import {insertTransaction, OperationType} from "./transactions";
 import {fetchTransactions} from "./transactions";
 import {payloadValidationMiddleware} from "./payload-validation-middleware";
 import {errorHandler} from "./error-handler";
-
+import {asyncHandler} from "./async-handler";
 
 
 export const createWebServer = () => {
@@ -18,7 +18,7 @@ export const createWebServer = () => {
 
     app.use(express.json());
 
-    app.get('/balance/:userId', errorHandler, async (req: Request, res: Response) => {
+    app.get('/balance/:userId', asyncHandler(async (req: Request, res: Response) => {
         if (!req.params.userId) throw new Error('The `userId` parameter is not present.');
 
         // Fetch all the transactions for the current userId from the database.
@@ -34,9 +34,9 @@ export const createWebServer = () => {
         }
 
         res.send(response);
-    });
+    }), errorHandler);
 
-    app.post('/balance/credit', payloadValidationMiddleware, errorHandler, async (req: Request, res: Response) => {
+    app.post('/balance/credit', payloadValidationMiddleware, asyncHandler(async (req: Request, res: Response) => {
 
         // Insert the transaction in the database.
         let credit = 'credit';
@@ -55,10 +55,10 @@ export const createWebServer = () => {
         }
 
         res.send(response);
-    })
+    }), errorHandler);
 
 
-    app.post('/balance/debit', payloadValidationMiddleware, errorHandler, async (req: Request, res: Response) => {
+    app.post('/balance/debit', payloadValidationMiddleware, asyncHandler(async (req: Request, res: Response) => {
 
         // Fetch all the transactions for the current userId from the database.
         const transactions = await fetchTransactions(pool, req.body.userId);
@@ -88,7 +88,7 @@ export const createWebServer = () => {
         }
 
         res.send(response);
-    })
+    }), errorHandler);
 
     const server = http.createServer(app);
 
