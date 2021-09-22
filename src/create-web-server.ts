@@ -21,8 +21,7 @@ export const createWebServer = () => {
 
     // Logs the request payload and request params if applicable
     app.use((req: Request, res: Response, next: NextFunction) => {
-        console.log("Request payload: ", req.body);
-        if (req.params) console.log("Request params: ", req.params);
+        console.log(`Request on path ${req.path}, with payload:`, req.body);
         next();
     });
 
@@ -47,7 +46,6 @@ export const createWebServer = () => {
     app.post('/balance/credit', payloadValidationMiddleware, asyncHandler(async (req: Request, res: Response) => {
 
         // Insert the transaction in the database.
-        let credit = 'credit';
         await insertTransaction(pool, req.body.userId, req.body.amount, req.body.referenceId, OperationType.CREDIT);
 
         // Fetch all the transactions for the current userId from the database.
@@ -80,7 +78,6 @@ export const createWebServer = () => {
         }
 
         // Insert the transaction in the database.
-        let debit = 'debit';
         await insertTransaction(pool, req.body.userId, req.body.amount, req.body.referenceId, OperationType.DEBIT);
 
         // Fetch all the transactions for the current userId from the database.
