@@ -10,7 +10,8 @@
     "test": "nyc mocha -r ts-node/register --exit \"src/**/*.test.ts\"",
     "db:create": "cd db && ./db-create.sh",
     "db:start": "cd db && ./db-start.sh",
-    "db:remove": "cd db && ./db-remove.sh"
+    "db:remove": "cd db && ./db-remove.sh",
+    "docker-compose": "docker-compose -f docker-compose.yml up --build -d"
   },
   "repository": {
     "type": "git",
