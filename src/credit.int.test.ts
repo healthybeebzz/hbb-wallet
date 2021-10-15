@@ -16,26 +16,29 @@ describe('/balance/credit', () => {
         port = server.port;
 
         await server.start();
-        await insertTransaction(pool, 987, 500, '123', OperationType.CREDIT);
+        await insertTransaction(pool, 980, 500, '143', OperationType.CREDIT);
 
     });
 
     after(async () => {
+
+        await pool.query(`DELETE FROM hbb_wallet.transactions WHERE refrence_id='123'`);
+
         await server.stop();
     });
 
     it('given existing balance > when calling POST /balance/credit > should return valid response', async () => {
         const payload = {
             amount: 1000,
-            userId: 987,
-            referenceId: '132'
+            userId: 980,
+            referenceId: '142'
         };
 
         const response = await axios.post(`http://localhost:${port}/balance/credit`, payload);
 
         expect(response.status).to.be.equal(200);
         expect(response.data).to.be.deep.equal({
-            userId: 987,
+            userId: 980,
             balance: 1500
         });
     });
