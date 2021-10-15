@@ -21,8 +21,7 @@ describe('/balance/credit', () => {
     });
 
     after(async () => {
-
-        await pool.query(`DELETE FROM hbb_wallet.transactions WHERE refrence_id='123'`);
+        await pool.query(`DELETE FROM hbb_wallet.transactions WHERE user_id=980`);
 
         await server.stop();
     });
