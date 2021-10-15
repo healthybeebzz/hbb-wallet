@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 import {default as axios} from 'axios';
 import {createWebServer} from "./create-web-server";
-import {fetchTransactions, insertTransaction, OperationType} from "./transactions";
+import {insertTransaction, OperationType} from "./transactions";
 import {connectToDb} from "./db-connection";
 
 
@@ -17,9 +17,6 @@ describe('/balance/debit', () => {
 
         await server.start();
         await insertTransaction(pool, 15, 1000, '123', OperationType.CREDIT);
-       // await fetchTransactions(pool, 15);
-
-
     });
 
     after(async () => {
