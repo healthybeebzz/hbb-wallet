@@ -20,10 +20,10 @@ describe('/balance/debit', () => {
     });
 
     after(async () => {
-        await server.stop();
 
         await pool.query(`DELETE FROM hbb_wallet.transactions WHERE refrence_id='123'`);
 
+        await server.stop();
     });
 
     it('given existing balance > when calling POST /balance/debit > should return valid response', async () => {
