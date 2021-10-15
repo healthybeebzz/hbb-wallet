@@ -30,7 +30,7 @@ describe('/balance/debit', () => {
         const payload = {
             amount: 400,
             userId: 15,
-            referenceId: '123'
+            referenceId: '143'
         };
 
         const response = await axios.post(`http://localhost:${port}/balance/debit`, payload);
@@ -39,6 +39,22 @@ describe('/balance/debit', () => {
         expect(response.data).to.be.deep.equal({
             userId: 15,
             balance: 600
+        });
+    });
+
+    it('given existing balance > when calling POST /balance/debit > should return valid response', async () => {
+        const payload = {
+            amount: 1100,
+            userId: 15,
+            referenceId: '144'
+        };
+
+        const response = await axios.post(`http://localhost:${port}/balance/debit`, payload);
+
+        expect(response.status).to.be.equal(200);
+        expect(response.data).to.be.deep.equal({
+            userId: 15,
+            balance: -100
         });
     });
 });
